@@ -6,19 +6,37 @@ def ball_movement():
     ball.y += ball_speed_y
 
     if ball.top <= 0 or ball.bottom >= screen_height:
+        pygame.mixer.Sound.play(pong_sound)
         ball_speed_y *= -1
 
     if ball.left <= 0:
+        pygame.mixer.Sound.play(score_sound)
         score_time = pygame.time.get_ticks()
         player_score += 1
 
     if ball.right >= screen_width:
+        pygame.mixer.Sound.play(score_sound)
         score_time = pygame.time.get_ticks()
         opponent_score += 1
 
-    if ball.colliderect(player) or ball.colliderect(opponent):
-        ball_speed_x *= -1
-        
+    if ball.colliderect(player) and ball_speed_x > 0:
+        pygame.mixer.Sound.play(pong_sound)
+        if abs(ball.right - player.left) < 10:
+            ball_speed_x *= -1
+        elif abs(ball.bottom - player.top) < 10 and ball_speed_y > 0:
+            ball_speed_y *= -1
+        elif abs(ball.top - player.bottom) < 10 and ball_speed_y > 0:
+            ball_speed_y *= -1
+
+    if ball.colliderect(opponent) and ball_speed_x < 0:
+        pygame.mixer.Sound.play(pong_sound)
+        if abs(ball.left - player.right):
+            ball_speed_x *= -1
+        elif abs(ball.bottom - opponent.top) < 10 and ball_speed_y > 0:
+            ball_speed_y *= -1
+        elif abs(ball.top - opponent.bottom) < 10 and ball_speed_y > 0:
+            ball_speed_y *= -1
+
 def player_movement():
     player.y += player_speed
     if player.top <= 0:
@@ -61,6 +79,7 @@ def ball_reset():
 
 
 #setup
+pygame.mixer.pre_init(44100, -16, 2, 512)
 pygame.init()
 clock = pygame.time.Clock()
 screen_width = 1280
@@ -92,9 +111,12 @@ game_font = pygame.font.Font("freesansbold.ttf", 32)
 #timer
 score_time = True
 
+#sound
+pong_sound = pygame.mixer.Sound("paddle.wav")
+score_sound = pygame.mixer.Sound("score.wav")
+
 #main loop
 while True:
-
     #input
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
