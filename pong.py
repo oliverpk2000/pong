@@ -85,7 +85,9 @@ clock = pygame.time.Clock()
 screen_width = 1280
 screen_height = 960
 screen = pygame.display.set_mode((screen_width, screen_height))
-pygame.display.set_caption('pong')
+pygame.display.set_caption("pong")
+icon = pygame.image.load("pong.png")
+pygame.display.set_icon(icon)
 
 #objects
 ball = pygame.Rect(screen_width/2 -15, screen_height/2 -15, 30, 30)
