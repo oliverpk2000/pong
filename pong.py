@@ -1,7 +1,7 @@
 import pygame, sys, random
 
 def ball_movement():
-    global ball_speed_x, ball_speed_y, player_score, opponent_score, score_time
+    global ball_speed_x, ball_speed_y, player_score, opponent_score, score_time, base_speed
     ball.x += ball_speed_x
     ball.y += ball_speed_y
 
@@ -13,11 +13,13 @@ def ball_movement():
         pygame.mixer.Sound.play(score_sound)
         score_time = pygame.time.get_ticks()
         player_score += 1
+        base_speed +=1
 
     if ball.right >= screen_width:
         pygame.mixer.Sound.play(score_sound)
         score_time = pygame.time.get_ticks()
         opponent_score += 1
+        base_speed += 1
 
     if ball.colliderect(player) and ball_speed_x > 0:
         pygame.mixer.Sound.play(pong_sound)
@@ -100,8 +102,9 @@ score_color = (100, 49, 115)
 obj_color = (134, 165, 156)
 
 #variables
-ball_speed_x = 7 * random.choice((1, -1))
-ball_speed_y = 7 * random.choice((1, -1))
+base_speed = 7
+ball_speed_x = base_speed * random.choice((1, -1))
+ball_speed_y = base_speed * random.choice((1, -1))
 player_speed = 0
 opponent_speed = 0
 
