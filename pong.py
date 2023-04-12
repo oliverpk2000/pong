@@ -97,8 +97,8 @@ opponent = pygame.Rect(10, screen_height/2 -70, 10, 140)
 
 #colors
 bg_color = pygame.Color((51, 51, 51))
-score_color = (100, 49, 115)
-obj_color = (134, 165, 156)
+score_color = (3, 221, 255)
+obj_color = (255, 255, 255)
 
 #variables
 base_speed = 7
