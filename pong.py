@@ -1,7 +1,7 @@
-import pygame, sys, random
+import pygame, sys, random, json
 
 def ball_movement():
-    global ball_speed_x, ball_speed_y, player_score, opponent_score, score_time, base_speed
+    global ball_speed_x, ball_speed_y, player_score, opponent_score, score_time, base_speed, speed_increase
     ball.x += ball_speed_x
     ball.y += ball_speed_y
 
@@ -13,13 +13,13 @@ def ball_movement():
         pygame.mixer.Sound.play(score_sound)
         score_time = pygame.time.get_ticks()
         player_score += 1
-        base_speed += 0.15
+        base_speed += speed_increase
 
     if ball.right >= screen_width:
         pygame.mixer.Sound.play(score_sound)
         score_time = pygame.time.get_ticks()
         opponent_score += 1
-        base_speed += 0.15
+        base_speed += speed_increase
 
     if ball.colliderect(player) and ball_speed_x > 0:
         pygame.mixer.Sound.play(pong_sound)
@@ -79,6 +79,11 @@ def ball_reset():
         ball_speed_x = base_speed * random.choice((1, -1))
         score_time = None
 
+#getting config for setup
+with open("config.json", "r") as json_file:
+    config = json.load(json_file)
+json_file.close()
+
 #setup
 pygame.mixer.pre_init(44100, -16, 2, 512)
 pygame.init()
@@ -86,8 +91,8 @@ clock = pygame.time.Clock()
 screen_width = 1280
 screen_height = 960
 screen = pygame.display.set_mode((screen_width, screen_height))
-pygame.display.set_caption("pong")
-icon = pygame.image.load("pong.png")
+pygame.display.set_caption(config.get("setup").get("caption"))
+icon = pygame.image.load(config.get("setup").get("icon"))
 pygame.display.set_icon(icon)
 
 #objects
@@ -96,28 +101,31 @@ player = pygame.Rect(screen_width - 20, screen_height/2 -70, 10, 140)
 opponent = pygame.Rect(10, screen_height/2 -70, 10, 140)
 
 #colors
-bg_color = pygame.Color((51, 51, 51))
-score_color = (3, 221, 255)
-obj_color = (255, 255, 255)  
+bg_color = pygame.Color(tuple(config.get("colors").get("bg_color")))
+score_color = (tuple(config.get("colors").get("score_color")))
+obj_color = (tuple(config.get("colors").get("obj_color")))  
 
 #variables
-base_speed = 7
+base_speed = config.get("ball").get("base_speed")
+speed_increase = config.get("ball").get("speed_increase")
 ball_speed_x = base_speed * random.choice((1, -1))
 ball_speed_y = base_speed * random.choice((1, -1))
 player_speed = 0
 opponent_speed = 0
+player_max_speed = config.get("player").get("speed")
+opponent_max_speed = config.get("opponent").get("speed")
 
 #text
-player_score = 0
-opponent_score = 0
+player_score = config.get("player").get("starting_score")
+opponent_score = config.get("opponent").get("starting_score")
 game_font = pygame.font.Font("freesansbold.ttf", 32)
 
 #timer
 score_time = True
 
 #sound
-pong_sound = pygame.mixer.Sound("paddle.wav")
-score_sound = pygame.mixer.Sound("score.wav")
+pong_sound = pygame.mixer.Sound(config.get("sounds").get("pong_sound"))
+score_sound = pygame.mixer.Sound(config.get("sounds").get("score_sound"))
 
 #main loop
 while True:
@@ -128,22 +136,22 @@ while True:
             sys.exit()
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_DOWN:
-                player_speed += 7
+                player_speed += player_max_speed
             if event.key == pygame.K_UP:
-                player_speed -= 7
+                player_speed -= player_max_speed
             if event.key == pygame.K_s:
-                opponent_speed += 7
+                opponent_speed += opponent_max_speed
             if event.key == pygame.K_w:
-                opponent_speed -= 7
+                opponent_speed -= opponent_max_speed
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_DOWN:
-                player_speed -= 7
+                player_speed -= player_max_speed
             if event.key == pygame.K_UP:
-                player_speed += 7
+                player_speed += player_max_speed
             if event.key == pygame.K_s:
-                opponent_speed -= 7
+                opponent_speed -= opponent_max_speed
             if event.key == pygame.K_w:
-                opponent_speed += 7
+                opponent_speed += opponent_max_speed
 
     ball_movement()
     player_movement()
