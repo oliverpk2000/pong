@@ -13,13 +13,13 @@ def ball_movement():
         pygame.mixer.Sound.play(score_sound)
         score_time = pygame.time.get_ticks()
         player_score += 1
-        base_speed += 0.25
+        base_speed += 0.15
 
     if ball.right >= screen_width:
         pygame.mixer.Sound.play(score_sound)
         score_time = pygame.time.get_ticks()
         opponent_score += 1
-        base_speed += 0.25
+        base_speed += 0.15
 
     if ball.colliderect(player) and ball_speed_x > 0:
         pygame.mixer.Sound.play(pong_sound)
@@ -75,8 +75,8 @@ def ball_reset():
         ball_speed_x, ball_speed_y = 0,0
 
     else:
-        ball_speed_y = base_speed * random.choice((1, -1))
-        ball_speed_x = base_speed * random.choice((1, -1))
+        ball_speed_y = -base_speed #base_speed * random.choice((1, -1))
+        ball_speed_x = -base_speed #base_speed * random.choice((1, -1))
         score_time = None
 
 #setup
@@ -98,7 +98,7 @@ opponent = pygame.Rect(10, screen_height/2 -70, 10, 140)
 #colors
 bg_color = pygame.Color((51, 51, 51))
 score_color = (3, 221, 255)
-obj_color = (255, 255, 255)
+obj_color = (255, 255, 255)  
 
 #variables
 base_speed = 7
