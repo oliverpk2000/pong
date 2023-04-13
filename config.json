@@ -1,0 +1,32 @@
+{
+  "setup": {
+    "caption": "pong",
+    "icon": "pong.png"
+  },
+
+  "colors": {
+    "bg_color": [51, 51, 51],
+    "score_color": [3, 221, 255],
+    "obj_color": [255, 255, 255]
+  },
+
+  "sounds": {
+    "pong_sound": "paddle.wav",
+    "score_sound": "score.wav"
+  },
+
+  "ball": {
+    "base_speed": 7,
+    "speed_increase": 0.15
+  },
+
+  "player": {
+    "speed": 7,
+    "starting_score": 0
+  },
+
+  "opponent": {
+    "speed": 7,
+    "starting_score": 0
+  }
+}
