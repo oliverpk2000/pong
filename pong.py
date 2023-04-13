@@ -75,8 +75,8 @@ def ball_reset():
         ball_speed_x, ball_speed_y = 0,0
 
     else:
-        ball_speed_y = -base_speed #base_speed * random.choice((1, -1))
-        ball_speed_x = -base_speed #base_speed * random.choice((1, -1))
+        ball_speed_y = base_speed * random.choice((1, -1))
+        ball_speed_x = base_speed * random.choice((1, -1))
         score_time = None
 
 #setup
